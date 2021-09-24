@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: VotingFactory
@@ -21,11 +21,11 @@ dataSources:
         - User
       abis:
         - name: VotingFactory
-          file: ./abis/VotingFactory.json
+          file: VotingFactory/abis/VotingFactory.json
       eventHandlers:
         - event: VotingProcessDeployed(address,address,string,string,string,string[],address[])
           handler: handleVotingProcessDeployed
-      file: ./src/mapping.ts
+      file: VotingFactory/VotingFactory.wasm
 templates:
   - kind: ethereum/contract
     name: VotingProcess
@@ -40,8 +40,8 @@ templates:
         - Vote
       abis:
         - name: VotingProcess
-          file: ./abis/VotingProcess.json
+          file: VotingProcess/abis/VotingProcess.json
       eventHandlers:
         - event: Voted(uint256,address,uint256)
           handler: handleVoted
-      file: ./src/mapping.ts
+      file: VotingFactory/VotingFactory.wasm

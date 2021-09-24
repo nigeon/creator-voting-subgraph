@@ -1,0 +1,35 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: VotingFactory
+    network: mumbai
+    source:
+      address: "0x9DAEb40970A95C817C1f37EBB765d660fDE0ff64"
+      abi: VotingFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - BeaconUpgraded
+        - Initialized
+        - Upgraded
+        - VotingProcessDeployed
+      abis:
+        - name: VotingFactory
+          file: ./abis/VotingFactory.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: Initialized(address)
+          handler: handleInitialized
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+        - event: VotingProcessDeployed(address,address,string,string,string,string[],address[])
+          handler: handleVotingProcessDeployed
+      file: ./src/mapping.ts

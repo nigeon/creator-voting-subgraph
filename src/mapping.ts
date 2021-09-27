@@ -1,4 +1,4 @@
-import { Address, DataSourceContext } from '@graphprotocol/graph-ts'
+import { Address, DataSourceContext, BigInt } from '@graphprotocol/graph-ts'
 import { VotingProcessDeployed } from "../generated/VotingFactory/VotingFactory"
 import { Voted } from "../generated/templates/VotingProcess/VotingProcess"
 import { Answer, Token, TokenVotingProcess, User, Vote, VotingProcess } from "../generated/schema"
@@ -41,7 +41,8 @@ export function handleVoted(event: Voted): void {
 
   entity.user = createUser(event.transaction.from).id;
   entity.votingProcess = event.transaction.to.toHex();
-  entity.answer = Answer.load(event.transaction.to.toHex() + event.params.answerId.toString()).id;
+  
+  entity.answer = Answer.load(event.transaction.to.toHex().toString() + event.params.answerId.toString()).id;
   entity.votingToken = Token.load(event.transaction.to.toHex() + event.params.votingToken.toHex()).id
   entity.votingAmount = event.params.votingAmount;
   entity.save(); 
@@ -58,8 +59,9 @@ export function createUser(address: Address): User {
   return user as User;
 }
 
-export function createAnswer(votingProcessId: string, index: number, ans: string): Answer {
-  let generatedId = votingProcessId.toString() + index.toString();
+export function createAnswer(votingProcessId: string, index: i32, ans: string): Answer {
+  let generatedId: string = votingProcessId.toString() + index.toString();
+
   let answer = Answer.load(generatedId);
   if (answer === null) {
     answer = new Answer(generatedId);

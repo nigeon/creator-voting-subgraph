@@ -42,8 +42,8 @@ export function handleVoted(event: Voted): void {
   entity.user = createUser(event.transaction.from).id;
   entity.votingProcess = event.transaction.to.toHex();
   
-  entity.answer = Answer.load(event.transaction.to.toHex().toString() + event.params.answerId.toString()).id;
-  entity.votingToken = Token.load(event.transaction.to.toHex() + event.params.votingToken.toHex()).id
+  entity.answer = Answer.load(event.transaction.to.toHex().toString() + '.' + event.params.answerId.toString()).id;
+  entity.votingToken = Token.load(event.transaction.to.toHex() + '.' + event.params.votingToken.toHex()).id
   entity.votingAmount = event.params.votingAmount;
   entity.save(); 
 }
@@ -60,7 +60,7 @@ export function createUser(address: Address): User {
 }
 
 export function createAnswer(votingProcessId: string, index: i32, ans: string): Answer {
-  let generatedId: string = votingProcessId.toString() + index.toString();
+  let generatedId: string = votingProcessId.toString() + '.' + index.toString();
 
   let answer = Answer.load(generatedId);
   if (answer === null) {
@@ -74,7 +74,7 @@ export function createAnswer(votingProcessId: string, index: i32, ans: string): 
 }
 
 export function createToken(votingProcessId: string, acceptedToken: Address): Token {
-  let generatedId = votingProcessId + acceptedToken.toHex();
+  let generatedId = votingProcessId.toString() + '.' + acceptedToken.toHex();
   let token = Token.load(generatedId);
   if (token === null) {
     token = new Token(generatedId);

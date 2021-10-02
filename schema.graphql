@@ -27,6 +27,7 @@ type Answer @entity {
   answer: String!
   votingProcess: VotingProcess!
   voted: [Vote!] @derivedFrom(field: "answer")
+  countVotes: BigInt!
 }
 
 type Vote @entity {

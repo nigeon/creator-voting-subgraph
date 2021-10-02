@@ -312,6 +312,15 @@ export class Answer extends Entity {
       this.set("voted", Value.fromStringArray(value as Array<string>));
     }
   }
+
+  get countVotes(): BigInt {
+    let value = this.get("countVotes");
+    return value.toBigInt();
+  }
+
+  set countVotes(value: BigInt) {
+    this.set("countVotes", Value.fromBigInt(value));
+  }
 }
 
 export class Vote extends Entity {

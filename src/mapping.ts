@@ -42,10 +42,14 @@ export function handleVoted(event: Voted): void {
   entity.user = createUser(event.transaction.from).id;
   entity.votingProcess = event.transaction.to.toHex();
   
-  entity.answer = Answer.load(event.transaction.to.toHex().toString() + '.' + event.params.answerId.toString()).id;
+  let answer: Answer = Answer.load(event.transaction.to.toHex().toString() + '.' + event.params.answerId.toString()) as Answer;
+  entity.answer = answer.id;
   entity.votingToken = Token.load(event.transaction.to.toHex() + '.' + event.params.votingToken.toHex()).id
   entity.votingAmount = event.params.votingAmount;
   entity.save(); 
+
+  answer.countVotes = answer.countVotes.plus(event.params.votingAmount);
+  answer.save();
 }
 
 export function createUser(address: Address): User {
@@ -67,6 +71,7 @@ export function createAnswer(votingProcessId: string, index: i32, ans: string): 
     answer = new Answer(generatedId);
     answer.votingProcess = votingProcessId;
     answer.answer = ans;
+    answer.countVotes = new BigInt(0);
     answer.save();
   }
 
